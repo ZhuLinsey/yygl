@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云游故里 | 数字解乡愁</title>
+    <!-- 引入图标库 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 引入滚动动画库 -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* --- 现代轻奢配色变量 --- */
+        
+         :root {
+            --bg-body: #fafaf9af;
+            /* 暖白色，比纯白更有质感 */
+            --bg-white: #FFFFFF;
+            --primary-green: #6B8E6E;
+            /* 鼠尾草绿，低调高级 */
+            --text-main: #111010;
+            /* 深炭灰，比纯黑柔和 */
+            --text-light: #070606;
+            --border-color: #E5E5E5;
+            --font-serif: "Songti SC", "SimSun", serif;
+            /* 宋体，营造文化感 */
+            --font-sans: "PingFang SC", "Helvetica Neue", sans-serif;
+        }
+        /* --- 全局重置 --- */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            /* 字体抗锯齿，更清晰 */
+        }
+        /* --- 导航栏 (极简白) --- */
+        
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 25px 60px;
+            z-index: 1000;
+            background: rgba(250, 250, 249, 0.2);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid transparent;
+            transition: 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        header.scrolled {
+            padding: 20px 60px;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.03);
+        }
+        
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+            color: var(--text-main);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            color: var(--primary-green);
+        }
+        
+        nav ul {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+        
+        nav a {
+            color: var(--text-main);
+            font-size: 0.9rem;
+            text-decoration: none;
+            letter-spacing: 1px;
+            position: relative;
+            transition: 0.3s;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--primary-green);
+            transition: 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        /* --- 第一部分：首页 (沉浸式画廊) --- */
+        
+        #home {
+            height: 100vh;
+            /* 建议替换为一张明亮、通透的现代化农村风景图 */
+            background: url('./b6cb231aab816de8244b6dc0d609501a.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        /* 这里的遮罩很淡，为了保持背景明亮 */
+        
+        #home::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(250, 250, 249, 0.1), var(--bg-body));
+        }
+        
+        .hero-content {
+            z-index: 1;
+            padding: 0 20px;
+        }
+        
+        .hero-subtitle {
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            display: block;
+            font-weight: 500;
+        }
+        
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: 6.5rem;
+            margin-bottom: 30px;
+            color: var(--text-main);
+            line-height: 1.1;
+        }
+        
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 550px;
+            margin: 0 auto 50px;
+            font-weight: 300;
+        }
+        
+        .btn-outline {
+            padding: 15px 50px;
+            border: 1px solid var(--text-main);
+            background: transparent;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+        
+        .btn-outline:hover {
+            background: var(--text-main);
+            color: #fff;
+        }
+        /* 底部奖章 (极简线条风) */
+        
+        .awards-bar {
+            position: absolute;
+            bottom: 40px;
+            width: 80%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 40px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .award-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            letter-spacing: 1px;
+        }
+        
+        .award-item i {
+            color: var(--primary-green);
+            font-size: 1.1rem;
+        }
+        /* --- 第二部分：VR展示 (柔和光晕) --- */
+        
+        #vr-show {
+            padding: 120px 5%;
+            background: var(--bg-body);
+            text-align: center;
+            position: relative;
+        }
+        /* 柔和的浅绿色光晕背景 */
+        
+        #vr-show::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 400px;
+            background: radial-gradient(circle, rgba(107, 142, 110, 0.1) 0%, rgba(250, 250, 249, 0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .vr-header {
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .vr-header h2 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+        
+        .vr-header p {
+            color: var(--text-light);
+            letter-spacing: 1px;
+        }
+        
+        .vr-container {
+            width: 100%;
+            height: 600px;
+            background: #fff;
+            border-radius: 2px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.06);
+            /* 柔和的大阴影 */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .vr-placeholder {
+            text-align: center;
+            color: var(--text-light);
+        }
+        
+        .vr-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary-green);
+            opacity: 0.6;
+        }
+        /* --- 第三部分：公司介绍 (杂志留白风) --- */
+        
+        #about-company {
+            padding: 100px 10%;
+            background: var(--bg-white);
+        }
+        
+        .magazine-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            margin-bottom: 100px;
+            align-items: center;
+        }
+        
+        .mag-image {
+            position: relative;
+        }
+        
+        .mag-image img {
+            width: 100%;
+            border-radius: 2px;
+            /* 稍微降低饱和度，显得更高级 */
+            filter: saturate(0.8);
+            transition: 0.6s;
+        }
+        
+        .mag-image:hover img {
+            filter: saturate(1);
+        }
+        
+        .mag-text h3 {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+        
+        .mag-text p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        
+        .stats-row {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .stat-item h4 {
+            font-size: 2rem;
+            color: var(--text-main);
+            margin-bottom: 5px;
+            font-family: var(--font-serif);
+        }
+        
+        .stat-item span {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            letter-spacing: 1px;
+        }
+        /* --- 第四部分：页脚 (极简灰) --- */
+        
+        #contact-us {
+            background: #F4F4F4;
+            padding: 80px 5% 40px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer-grid {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-brand h2 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+        
+        .footer-brand p {
+            color: var(--text-light);
+            max-width: 300px;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 60px;
+        }
+        
+        .link-col h4 {
+            margin-bottom: 20px;
+            color: var(--text-main);
+            font-size: 1rem;
+        }
+        
+        .link-col ul {
+            list-style: none;
+        }
+        
+        .link-col li {
+            margin-bottom: 12px;
+        }
+        
+        .link-col a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        
+        .link-col a:hover {
+            color: var(--primary-green);
+        }
+        
+        .copyright {
+            text-align: center;
+            color: #999;
+            font-size: 0.8rem;
+            padding-top: 20px;
+            border-top: 1px solid #E5E5E5;
+        }
+        /* --- 响应式 --- */
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 20px;
+            }
+            nav {
+                display: none;
+            }
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            .magazine-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .awards-bar {
+                display: none;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .vr-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="navbar">
+        <div class="logo">
+            <img src="图片1.png" alt="云游故里 Logo" style="height: 40px; width: auto;">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">首页</a></li>
+                <li><a href="#vr-show">VR全景</a></li>
+                <li><a href="#about-company">品牌理念</a></li>
+                <li><a href="#contact-us">联系我们</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home">
+        <div class="hero-content">
+            <span class="hero-subtitle">探索 · 发现 · 传承</span>
+            <h1 class="hero-title">云游故里</h1>
+            <p class="hero-desc">以数字科技重塑乡村肌理，在云端遇见现代化的诗意栖居。</p>
+            <button class="btn-outline" onclick="location.href='#vr-show'">开启沉浸之旅</button>
+        </div>
+
+        <div class="awards-bar">
+            <div class="award-item"><i class="fas fa-award"></i> 国家4A级旅游景区</div>
+            <div class="award-item"><i class="fas fa-leaf"></i> 生态示范村</div>
+            <div class="award-item"><i class="fas fa-wifi"></i> 5G智慧乡村</div>
+        </div>
+    </section>
+
+    <section id="vr-show">
+        <div class="vr-header">
+            <span style="color: var(--primary-green); letter-spacing: 2px; font-size: 0.9rem;">VIRTUAL REALITY</span>
+            <h2>全景漫游 · 身临其境</h2>
+        </div>
+
+        <div class="vr-header">
+            <div class="mag-image">
+                <video controls width="100%">
+                    <source src="./80e1de6de85b3f3a3971296929b7264d.mp4"type="video/mp4">
+                    <source src="./80e1de6de85b3f3a3971296929b7264d.mp4"type="video/-webkit-font-smoothing">
+                    您的浏览器不支持视频标签，请升级浏览器。
+                </video>
+    </section>
+
+    <section id="about-company">
+        <div class="magazine-grid">
+            <div class="mag-image">
+                <video controls width="100%">
+                    <source src="./1.mp4"type="video/mp4">
+                    <source src="./1.mp4"type="video/-webkit-font-smoothing">
+                    您的浏览器不支持视频标签，请升级浏览器。
+                </video>
+            </div>
+            <div class="mag-text">
+                <h3>数字赋能<br>让乡村与世界对话</h3>
+                <p>云游故里不仅仅是一个展示平台，它是连接传统农耕文明与现代数字生活的桥梁。我们致力于挖掘乡村的深层价值，通过高精度的数字孪生技术，将现代化新农村的风貌呈现在全球用户面前。</p>
+                <p>我们相信，最极致的风景往往藏在最质朴的土地里。</p>
+
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <h4>100%</h4>
+                        <span>实景还原</span>
+                    </div>
+                    <div class="stat-item">
+                        <h4>4K+</h4>
+                        <span>超清画质</span>
+                    </div>
+                    <div class="stat-item">
+                        <h4>24h</h4>
+                        <span>云端在线</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="magazine-grid">
+            <div class="mag-image">
+                <video controls width="100%">
+                    <source src="./7b5098fa7d87353b1876b74591f88b53.mp4"type="video/mp4">
+                    <source src="./7b5098fa7d87353b1876b74591f88b53.mp4"type="video/-webkit-font-smoothing">
+                    您的浏览器不支持视频标签，请升级浏览器。
+                </video>
+            </div>
+            <div class="mag-text">
+                <h3>匠心独运<br>重新定义云旅游</h3>
+                <p>我们拥有一支由资深摄影师、3D建模师和工程师组成的团队。从无人机航拍到前端渲染，每一个像素都经过精心打磨。</p>
+                <p>无论是智慧农业还是古村落保护，我们都以国际一流标准交付。</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact-us">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>云游故里</h2>
+                <p>探索乡村振兴的数字化解决方案，期待与您的合作。</p>
+            </div>
+            <div class="footer-links">
+                <div class="link-col">
+                    <h4>探索</h4>
+                    <ul>
+                        <li><a href="#home">首页</a></li>
+                        <li><a href="#vr-show">VR体验</a></li>
+                        <li><a href="#about-company">品牌故事</a></li>
+                    </ul>
+                </div>
+                <div class="link-col">
+                    <h4>联系</h4>
+                    <ul>
+                        <li>400-888-6666</li>
+                        <li>contact@yunyouguli.com</li>
+                        <li>云游故里科技有限公司</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2026 云游故里 版权所有
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+
+</html>
